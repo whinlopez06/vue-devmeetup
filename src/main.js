@@ -43,7 +43,7 @@ new Vue({
   created () {
     // firebase SDK
     firebase.initializeApp({
-      apiKey: "AIzaSyDoB7dXJXlkHYxpNgUcrgXSUYTDzN4abvU",
+      apiKey: "<API KEY goes here>",
       authDomain: "devmeetup-b40f0.firebaseapp.com",
       databaseURL: "https://devmeetup-b40f0.firebaseio.com",
       projectId: "devmeetup-b40f0",
