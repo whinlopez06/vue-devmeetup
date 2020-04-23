@@ -1,0 +1,101 @@
+<template>
+    <v-app>
+    <v-container>
+
+    <v-layout row v-if="error">
+        <v-flex xs12 sm6 offset-sm3>
+            <!--emit dismissed-->
+            <app-alert @dismissed="onDismissed" :text="error.message">
+            </app-alert>
+        </v-flex>
+    </v-layout>
+    <v-layout row>
+        <v-flex xs12 sm6 offset-sm3>
+            <v-card>
+                <v-card-text>
+                    <v-container>
+                        <!--make form listen to submit event but prevent sending whole page submit-->
+                        <form @submit.prevent="onSignin">
+                            <v-layout row>
+                                <v-flex xs12>
+                                    <v-text-field
+                                            name="email"
+                                            label="Mail"
+                                            id="email"
+                                            v-model="email"
+                                            type="email"
+                                            required>
+                                    </v-text-field>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout row>
+                                <v-flex xs12>
+                                    <v-text-field
+                                            name="password"
+                                            label="Password"
+                                            id="password"
+                                            v-model="password"
+                                            type="password"
+                                            required>
+                                    </v-text-field>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout row>
+                                <v-btn type="submit" class="ma-2" :disabled="loading" :loading="loading">
+                                    Sign in
+                                    <template v-slot:loader>
+                                        <span class="custom-loader">
+                                          <v-icon light>cached</v-icon>
+                                        </span>
+                                    </template>
+                                </v-btn>
+                            </v-layout>
+                        </form>
+                    </v-container>
+                </v-card-text>
+            </v-card>
+        </v-flex>
+
+    </v-layout>
+    </v-container>
+    </v-app>
+</template>
+
+<script>
+    export default {
+        data () {
+            return {
+                email: '',
+                password: ''
+            }
+        },
+        computed: {
+            user () {
+                return this.$store.getters.user
+            },
+            error () {
+                return this.$store.getters.error
+            },
+            loading () {
+                return this.$store.getters.loading
+            }
+        },
+        watch : {
+            user (value) {
+                if(value !== null && value !== undefined) {
+                    this.$router.push('/')
+                }
+            }
+        },
+        methods: {
+            onSignin () {
+                // Vuex action
+                //console.log({email: this.email, password: this.password, confirmPassword: this.confirmPassword})
+                this.$store.dispatch('signUserIn', {email: this.email, password: this.password})
+            },
+            onDismissed () {
+                this.$store.dispatch('clearError')
+            }
+        }
+    }
+</script>
